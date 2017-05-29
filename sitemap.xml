@@ -7,46 +7,54 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://ransonr.github.io/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:58:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/2014/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/2015/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/about/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/archive.html</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:57:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/blog/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/categories/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/categories/sports/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
-  <loc>https://ransonr.github.io/galleries/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <loc>https://ransonr.github.io/lifecalendar/</loc>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/posts/dfs-valuations/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/posts/ncaab-pagerank/</loc>
-  <lastmod>2017-05-29T00:56:00Z</lastmod>
+  <lastmod>2017-05-29T16:29:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://ransonr.github.io/projecs/</loc>
+  <lastmod>2017-05-29T16:57:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://ransonr.github.io/projects/</loc>
+  <lastmod>2017-05-29T16:58:00Z</lastmod>
  </url>
 </urlset>

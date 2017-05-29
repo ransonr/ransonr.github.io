@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Ryan Ranson's GitHub Page">
-<title>Posts for year 2014 | ransonr.github.io</title>
+<title>Life Calendar | ransonr.github.io</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -12,7 +11,7 @@
 <link href="../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
 <link href="../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
 <link href="../assets/css/main.css" rel="stylesheet" type="text/css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script><link rel="canonical" href="https://ransonr.github.io/2014/">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script><link rel="canonical" href="https://ransonr.github.io/lifecalendar/">
 <!--[if lt IE 9]><script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
 <body>
@@ -37,12 +36,38 @@
 </div>
     </div>
 </nav><div class="container" id="content" role="main">
-<article class="listpage"><header><h1>Posts for year 2014</h1>
-    </header><ul class="postlist">
-<li>
-<time class="listdate" datetime="2014-11-13T00:00:00-06:00" title="November 13, 2014">November 13, 2014</time><a href="../posts/ncaab-pagerank/" class="listtitle">Ranking NCAA Basketball Teams with PageRank</a>
-</li>
-    </ul></article>
+<article class="post-text storypage" itemscope="itemscope" itemtype="http://schema.org/Article"><header></header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="row">
+    <div class="col">
+        <div class="page-header">
+            <h1>Life Calendar</h1>
+            <small>
+                The idea for this is taken directly from <a href="http://waitbutwhy.com/2014/05/life-weeks.html">Wait But Why</a>, which is one of my favorite sites to visit. I have the poster on my wall but thought an interactive visualization would be a good chance to practice some D3.
+            </small>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2">
+        <form>
+            <div class="form-group">
+                <label for="birthdate-input" class="form-label">Birthdate</label>
+                <input class="form-control" type="date" value="1987-04-19" id="birthdate-input">
+</div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col text-center">
+        <div id="grid"></div>
+        <script src="https://d3js.org/d3.v4.min.js"></script><script src="../assets/js/lifecalendar.js" type="text/javascript"></script>
+</div>
+</div>
+    </div>
+    
+</article>
 </div>
 
 <div class="container text-center">
