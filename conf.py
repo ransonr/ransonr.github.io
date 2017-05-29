@@ -67,6 +67,7 @@ NAVIGATION_LINKS = {
     DEFAULT_LANG: (
         ('/about/', 'About'),
         ('/blog/', 'Posts'),
+        ('/projects/', 'Projects'),
     ),
 }
 
