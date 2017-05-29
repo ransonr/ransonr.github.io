@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://ransonr.github.io/</loc>
-  <lastmod>2017-05-29T16:58:00Z</lastmod>
+  <lastmod>2017-05-29T17:45:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/2014/</loc>
@@ -48,10 +48,6 @@
  <url>
   <loc>https://ransonr.github.io/posts/ncaab-pagerank/</loc>
   <lastmod>2017-05-29T16:29:00Z</lastmod>
- </url>
- <url>
-  <loc>https://ransonr.github.io/projecs/</loc>
-  <lastmod>2017-05-29T16:57:00Z</lastmod>
  </url>
  <url>
   <loc>https://ransonr.github.io/projects/</loc>
