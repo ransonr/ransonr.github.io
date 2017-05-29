@@ -1,0 +1,27 @@
+{% import 'helper.tmpl' as helper with context %}
+{% import 'post_header.tmpl' as pheader with context %}
+{% import 'math_helper.tmpl' as math with context %}
+{% extends 'base.tmpl' %}
+
+{% block extra_head %}
+    {{ super() }}
+    {% if post.meta('keywords') %}
+        <meta name="keywords" content="{{ post.meta('keywords')|e }}">
+    {% endif %}
+    <meta name="author" content="{{ post.author()|e }}">
+    {% if post.prev_post %}
+        <link rel="prev" href="{{ post.prev_post.permalink() }}" title="{{ post.prev_post.title()|e }}" type="text/html">
+    {% endif %}
+    {% if post.next_post %}
+        <link rel="next" href="{{ post.next_post.permalink() }}" title="{{ post.next_post.title()|e }}" type="text/html">
+    {% endif %}
+    {{ math.math_styles_ifpost(post) }}
+{% endblock %}
+
+{% block content %}
+
+    {{ helper.html_title() }}
+    {{ post.text() }}
+
+{{ math.math_scripts_ifpost(post) }}
+{% endblock %}

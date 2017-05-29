@@ -1,0 +1,22 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+.navbar-default .navbar-brand {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.circular {
+  width: 300px;
+  height: 300px;
+  border-radius: 150px;
+  -webkit-border-radius: 150px;
+  -moz-border-radius: 150px;
+  margin-bottom: 15px;
+}
+
+a#github-octicon{
+  font-size: 22px;
+  color: #1a1a1a;
+}
