@@ -1,0 +1,4 @@
+Sitemap: https://ransonr.github.io/sitemapindex.xml
+
+User-Agent: *
+Host: ransonr.github.io

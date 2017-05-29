@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranking NCAA Basketball Teams with PageRank | ransonr.github.io</title>
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css" rel="stylesheet">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/main.css" rel="stylesheet" type="text/css">
+<link rel="canonical" href="https://ransonr.github.io/posts/ncaab-pagerank/">
+<!--[if lt IE 9]><script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+
+<nav class="navbar navbar-default"><div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../../">ransonr.github.io</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+<li><a href="../../about/">About</a></li>
+                    <li><a href="../../blog/">Posts</a></li>
+                <li><a id="github-octicon" href="https://github.com/ransonr/"><i class="fa fa-github" title="View My GitHub"><i></i></i></a></li>
+            </ul>
+</div>
+    </div>
+</nav><div class="container" id="content" role="main">
+
+            <div class="page-header">
+            <h1 class="entry-title">Ranking NCAA Basketball Teams with PageRank</h1>
+            <p class="text-muted">
+                <time class="dt-published">November 13, 2014</time></p>
+        </div>
+
+
+    <div>
+<p>I was recently trying to think of good ways to rank college basketball teams and thought I had a unique idea in applying Google's PageRank algorithm to the problem. It turns out I am not as original as I had hoped and this approach seems to be fairly widely used. The most useful example I found was <a href="http://http://www.ncsu.edu/crsc/reports/ftp/pdf/crsc-tr06-19.pdf">applied to NFL teams</a> but it generalizes easily to any other sport. I was hoping to find up-to-date or historical rankings for NCAA basketball using this method but was unable to find anything publicly available. I'll attempt to construct these rankings for the 2013 season and compare it to the results of other popular methods. If the results are useful, I hope to maintain weekly rankings for the current season.</p>
+<p>I obtained the full 2013-2014 season of NCAA men's basketball game scores from <a href="https://www.spreadsheet-sports.com/2014-ncaa-mens-basketball-game-results-data/">Spreadsheet Sports</a>. Let's begin with data loading and preparation:</p>
+<pre class="code literal-block"><span></span><span class="kn">library</span><span class="p">(</span>RCurl<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>devtools<span class="p">)</span>
+
+games.url <span class="o">&lt;-</span> getURL<span class="p">(</span><span class="s">"https://raw.githubusercontent.com/ransonr/SportsAnalytics/master/data/NCAAM_2014_FullSeason.csv"</span><span class="p">)</span>
+games <span class="o">&lt;-</span> read.csv<span class="p">(</span>text <span class="o">=</span> games.url<span class="p">,</span> header <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> stringsAsFactors <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+games <span class="o">&lt;-</span> games<span class="p">[</span>games<span class="o">$</span>Team.Differential <span class="o">&gt;</span> <span class="m">0</span><span class="p">,]</span> <span class="c1"># Data is duplicated for home/away</span>
+games<span class="o">$</span>Date <span class="o">&lt;-</span> <span class="kp">as.Date</span><span class="p">(</span>games<span class="o">$</span>Date<span class="p">,</span> <span class="s">"%m/%d/%Y"</span><span class="p">)</span>
+
+teams <span class="o">&lt;-</span> <span class="kp">unique</span><span class="p">(</span><span class="kt">c</span><span class="p">(</span>games<span class="o">$</span>Team<span class="p">,</span> games<span class="o">$</span>Opponent<span class="p">))</span>
+n <span class="o">&lt;-</span> <span class="kp">length</span><span class="p">(</span>teams<span class="p">)</span>
+</pre>
+
+
+<p>We now need to create the n x n hyperlink matrix H, where entry (i,j) corresponds to the total number of points team j outscored team i by. This can be thought of as team i's "vote" given to team j.</p>
+<pre class="code literal-block"><span></span><span class="c1"># Entry (i, j) of H will be the total # of points team j outscored team i by</span>
+H <span class="o">&lt;-</span> <span class="kt">matrix</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> nrow <span class="o">=</span> n<span class="p">,</span> ncol <span class="o">=</span> n<span class="p">)</span>
+<span class="kp">colnames</span><span class="p">(</span>H<span class="p">)</span> <span class="o">&lt;-</span> teams
+<span class="kp">rownames</span><span class="p">(</span>H<span class="p">)</span> <span class="o">&lt;-</span> teams
+
+<span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="m">1</span><span class="o">:</span><span class="kp">nrow</span><span class="p">(</span>games<span class="p">))</span> <span class="p">{</span>
+  t1 <span class="o">&lt;-</span> games<span class="o">$</span>Team<span class="p">[</span>i<span class="p">]</span>
+  t2 <span class="o">&lt;-</span> games<span class="o">$</span>Opponent<span class="p">[</span>i<span class="p">]</span>
+  H<span class="p">[</span><span class="kt">c</span><span class="p">(</span>t2<span class="p">),</span> <span class="kt">c</span><span class="p">(</span>t1<span class="p">)]</span> <span class="o">&lt;-</span> H<span class="p">[</span><span class="kt">c</span><span class="p">(</span>t2<span class="p">),</span> <span class="kt">c</span><span class="p">(</span>t1<span class="p">)]</span> <span class="o">+</span> games<span class="o">$</span>Team.Differential<span class="p">[</span>i<span class="p">]</span>
+<span class="p">}</span>
+</pre>
+
+
+<p>Next we need to adjust the matrix H to be stochastic. To make it stochastic we need to ensure all entries are nonnegative (done) and all rows sum to 1. To make each row sum to 1 we simply divide each entry by it's row sum. We might run into an issue if a team has an undefeated season, in which case their row will contain all 0's. In this case, we can simply plug 1/n into each entry of the row: </p>
+<pre class="code literal-block"><span></span><span class="c1"># Divide rows by row sums</span>
+H <span class="o">&lt;-</span> H <span class="o">/</span> <span class="kp">rowSums</span><span class="p">(</span>H<span class="p">)</span>
+
+<span class="c1"># If a team is undefeated, the whole row will be zero -&gt; just put 1/n in each entry</span>
+<span class="kr">for</span> <span class="p">(</span>i <span class="kr">in</span> <span class="m">1</span><span class="o">:</span><span class="kp">nrow</span><span class="p">(</span>H<span class="p">))</span> <span class="p">{</span>
+  <span class="kr">if</span> <span class="p">(</span><span class="kp">sum</span><span class="p">(</span>H<span class="p">[</span>i<span class="p">,])</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+    H<span class="p">[</span>i<span class="p">,]</span> <span class="o">&lt;-</span> <span class="m">1</span> <span class="o">/</span> n
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+
+
+<p>I implemented the PageRank algorithm using the <a href="http://en.wikipedia.org/wiki/PageRank#Power_Method">power method</a> and the source can be viewed <a href="https://github.com/ransonr/SportsAnalytics/blob/master/R/PageRank.R">here</a>.</p>
+<pre class="code literal-block"><span></span>source_url<span class="p">(</span><span class="s">"https://raw.githubusercontent.com/ransonr/SportsAnalytics/master/R/PageRank.R"</span><span class="p">)</span>
+
+page.rank <span class="o">&lt;-</span> PageRank<span class="p">(</span>H<span class="p">,</span> <span class="m">0.85</span><span class="p">)</span>
+
+rank.df <span class="o">&lt;-</span> <span class="kt">data.frame</span><span class="p">(</span>PageRank <span class="o">=</span> page.rank<span class="o">$</span>pr<span class="p">)</span>
+rank.df<span class="o">$</span>Rank <span class="o">&lt;-</span> <span class="kp">rank</span><span class="p">(</span><span class="o">-</span>page.rank<span class="o">$</span>pr<span class="p">)</span>
+rank.df <span class="o">&lt;-</span> rank.df<span class="p">[</span><span class="kp">with</span><span class="p">(</span>rank.df<span class="p">,</span> <span class="kp">order</span><span class="p">(</span>Rank<span class="p">)),]</span>
+</pre>
+
+
+<p>So how do the results look?</p>
+<pre class="code literal-block"><span></span><span class="kp">head</span><span class="p">(</span>rank.df<span class="p">,</span> <span class="m">25</span><span class="p">)</span>
+</pre>
+
+
+<pre class="code literal-block"><span></span>##                PageRank Rank
+## Louisville     0.014946    1
+## Arizona        0.012374    2
+## Duke           0.012279    3
+## Louisiana Tech 0.012043    4
+## Wichita St     0.011447    5
+## Florida        0.011392    6
+## Kansas         0.010888    7
+## San Diego St   0.010846    8
+## Virginia       0.010807    9
+## SF Austin      0.010564   10
+## Cincinnati     0.010465   11
+## UCLA           0.010114   12
+## Kentucky       0.009912   13
+## N Dakota St    0.009901   14
+## New Mexico     0.009664   15
+## Harvard        0.009640   16
+## Connecticut    0.009593   17
+## Iowa           0.009389   18
+## Gonzaga        0.009387   19
+## Wisconsin      0.009233   20
+## Oklahoma St    0.009187   21
+## WI Green Bay   0.009123   22
+## Southern Miss  0.009105   23
+## Tennessee      0.009092   24
+## Michigan St    0.008921   25
+</pre>
+
+
+<p>This looks halfway promising! Plenty of familiar names in the top 25 here although Louisana Tech jumps out as the first and most obvious aberration. In a later post I intend to compare the results from this ranking method to the results of other popular ranking methods (RPI, Ken Pom, etc...).</p>
+</div>
+
+
+</div>
+
+<div class="container text-center">
+    <hr>
+<footer class="text-muted" id="footer">
+        Contents © 2017 <a href="mailto:ryan.ranson@gmail.com">Ryan Ranson</a> - Powered by <a href="https://getnikola.com" rel="nofollow">Nikola</a> 
+    </footer>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script><script>
+    $(document).ready(function() {
+        $('pre.code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>
+</body>
+</html>
