@@ -1,24 +1,29 @@
 body {
-    font-family: 'Noto Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .navbar-default .navbar-brand {
-    font-size: 22px;
+  font-size: 22px;
 }
 
 .circular {
-    width: 300px;
-    height: 300px;
-    border-radius: 150px;
-    -webkit-border-radius: 150px;
-    -moz-border-radius: 150px;
-    margin-bottom: 15px;
+  width: 300px;
+  height: 300px;
+  border-radius: 150px;
+ -webkit-border-radius: 150px;
+  -moz-border-radius: 150px;
+  margin-bottom: 15px;
 }
 
 a#github-octicon {
-    font-size: 22px;
+  font-size: 22px;
 }
 
 a#github-octicon:hover {
-    color: #0080ff;
+  color: #0080ff;
+}
+
+div#content {
+  margin-left: 5%;
+  margin-right: 5%;
 }
