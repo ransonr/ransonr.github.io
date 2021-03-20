@@ -48,7 +48,7 @@
           y: ypos,
           width: width,
           height: height,
-          fill: weekStart < today ? "b0c4d3" : "fff",
+          fill: weekStart < today ? "#b0c4d3" : "#fff",
           week: row * 52 + column,
           age: ageString(yearCount, column),
           beginDate: weekStart,
@@ -90,7 +90,7 @@
       .style("fill", function(d) { return d.fill; })
       .style("stroke", "#222")
       .on('mouseover', function(d) {
-        d3.select(this).style("fill", "4169e1");
+        d3.select(this).style("fill", "#4169e1");
         tooltip.html(hoverText(d));
         tooltip.style("visibility", "visible");
       })
